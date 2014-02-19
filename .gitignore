@@ -1,0 +1,15 @@
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+*.swp
+
+target
+/cas-demo-client/deploy
+/toopher-cas-overlay/deploy
+.idea
+*.iml
+.DS_store
