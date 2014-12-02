@@ -3,7 +3,7 @@ package com.toopher.integrations.cas;
 
 import com.toopher.integrations.cas.authentication.LevelOfAssurance;
 import org.apache.log4j.Logger;
-import com.toopher.api.ToopherIframe;
+import com.toopher.ToopherIframe;
 import com.toopher.integrations.cas.authentication.principal.UsernameToEmailMapper;
 
 public class ToopherCAS {
@@ -13,15 +13,23 @@ public class ToopherCAS {
     private UsernameToEmailMapper usernameToEmailMapper;
     private int iframeTtl = 60;
 
+    private ToopherIframe toopherIframe = null;
+    private ToopherIframe getToopherIframe() {
+        if (toopherIframe == null) {
+            toopherIframe = new ToopherIframe(toopherConfig.getConsumerKey(), toopherConfig.getConsumerSecret(), toopherConfig.getApiUrl());
+        }
+        return toopherIframe;
+    }
+
     public String pairIframeUrl(String username) {
-        return ToopherIframe.pairIframeUrl(username, getEmailForUsername(username), iframeTtl, toopherConfig.getApiUrl(), toopherConfig.getConsumerKey(), toopherConfig.getConsumerSecret());
+        return getToopherIframe().pairUri(username, getEmailForUsername(username), iframeTtl);
     }
 
     public String authIframeUrl(String username, Long levelOfAssuranceValue, String loginTicketId) {
         logger.debug("ToopherCAS: authIframeUrl(" + username + ", " + String.valueOf(levelOfAssuranceValue) + ")");
         LevelOfAssurance loa = new LevelOfAssurance(levelOfAssuranceValue);
         boolean isAutomationAllowed = !loa.isDisallowAutomationRequired();
-        return ToopherIframe.authIframeUrl(username, getEmailForUsername(username), "Log In", isAutomationAllowed, loa.isChallengeRequired(), loginTicketId, "metadata", iframeTtl, toopherConfig.getApiUrl(), toopherConfig.getConsumerKey(), toopherConfig.getConsumerSecret());
+        return getToopherIframe().authUri(username, getEmailForUsername(username), "Log In", isAutomationAllowed, loa.isChallengeRequired(), loginTicketId, "metadata", iframeTtl);
     }
 
     private String getEmailForUsername(String username) {

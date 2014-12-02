@@ -2,6 +2,7 @@
 package com.toopher.integrations.cas.authentication.principal;
 
 import java.util.Map;
+import java.util.HashMap;
 import org.jasig.cas.authentication.principal.Credentials;
 
 public class ToopherCredentials implements Credentials {
@@ -30,6 +31,13 @@ public class ToopherCredentials implements Credentials {
     @java.lang.SuppressWarnings("all")
     public Map<String, String> getRequestParameters() {
         return this.requestParameters;
+    }
+    public Map<String, String[]> getRequestParametersAsFatMap() {
+        Map<String, String[]> result = new HashMap<String, String[]>();
+        for(String key : this.requestParameters.keySet()){
+            result.put(key, new String[]{this.requestParameters.get(key)});
+        }
+        return result;
     }
 
     @java.lang.SuppressWarnings("all")

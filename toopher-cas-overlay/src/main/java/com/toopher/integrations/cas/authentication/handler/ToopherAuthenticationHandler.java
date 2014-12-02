@@ -8,7 +8,8 @@ import org.jasig.cas.authentication.handler.UncategorizedAuthenticationException
 import org.jasig.cas.authentication.principal.Credentials;
 import com.toopher.integrations.cas.ToopherConfig;
 import com.toopher.integrations.cas.authentication.principal.ToopherCredentials;
-import com.toopher.api.ToopherIframe;
+import com.toopher.ToopherIframe;
+import com.toopher.ToopherIframe.SignatureValidationError;
 import org.apache.log4j.Logger;
 
 public class ToopherAuthenticationHandler implements AuthenticationHandler {
@@ -28,21 +29,25 @@ public class ToopherAuthenticationHandler implements AuthenticationHandler {
     private static final String PAIRING_NOT_AUTHORIZED_SIG = "Pairing has not been authorized to authenticate";
     private static Logger logger = Logger.getLogger("com.toopher.integrations.cas");
 
+    private ToopherIframe toopherIframe = null;
+    private ToopherIframe getToopherIframe() {
+        if (toopherIframe == null) {
+            toopherIframe = new ToopherIframe(toopherConfig.getConsumerKey(), toopherConfig.getConsumerSecret(), toopherConfig.getApiUrl());
+        }
+        return toopherIframe;
+    }
+
     @Override
     public boolean authenticate(Credentials credentials) throws AuthenticationException {
         final ToopherCredentials toopherCredentials = (ToopherCredentials)credentials;
         logger.debug("Authenticate: username=" + toopherCredentials.getUsername());
-        Map<String, String> validatedData = ToopherIframe.validate(toopherConfig.getConsumerSecret(), toopherCredentials.getRequestParameters(), 100);
-        if (validatedData == null) {
+        Map<String, String> validatedData = null;
+        try {
+            validatedData = getToopherIframe().validate(toopherCredentials.getRequestParametersAsFatMap(), toopherCredentials.getLoginTicketId(), 100);
+        } catch (SignatureValidationError e) {
             throw new ToopherAuthenticationException("toopher.authentication.error.invalid_signature", "Invalid signature returned by Toopher API", "toopherInvalidSignature");
         }
-        if (validatedData.containsKey("session_token")) {
-            String toopherAuthSessionToken = validatedData.get("session_token");
-            if (!toopherAuthSessionToken.equals(toopherCredentials.getLoginTicketId())) {
-                // valid data, but for a different loginTokenID!
-                return false;
-            }
-        }
+
         if (validatedData.containsKey("error_code")) {
             String errorCode = validatedData.get("error_code");
             String errorMessage = validatedData.get("error_message");
