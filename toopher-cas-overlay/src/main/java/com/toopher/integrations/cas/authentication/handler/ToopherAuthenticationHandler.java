@@ -43,7 +43,9 @@ public class ToopherAuthenticationHandler implements AuthenticationHandler {
         logger.debug("Authenticate: username=" + toopherCredentials.getUsername());
         Map<String, String> validatedData = null;
         try {
-            validatedData = getToopherIframe().validate(toopherCredentials.getRequestParametersAsFatMap(), toopherCredentials.getLoginTicketId(), 100);
+            Map<String, String[]> requestParams = toopherCredentials.getRequestParametersAsFatMap();
+            requestParams.remove("TARGET");
+            validatedData = getToopherIframe().validate(requestParams, toopherCredentials.getLoginTicketId(), 100);
         } catch (SignatureValidationError e) {
             throw new ToopherAuthenticationException("toopher.authentication.error.invalid_signature", "Invalid signature returned by Toopher API", "toopherInvalidSignature");
         }
