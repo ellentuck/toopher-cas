@@ -1,5 +1,7 @@
 package com.toopher.integrations.cas.authentication;
 
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.AuthenticationMetaDataPopulator;
@@ -15,8 +17,11 @@ public class UsernamePasswordAuthenticationMetaDataPopulator implements Authenti
 
     @Override
     public Authentication populateAttributes(Authentication authentication, Credentials credentials) {
-        if (credentials instanceof UsernamePasswordCredentials) {
-            Principal simplePrincipal = new SimplePrincipal(authentication.getPrincipal().getId());
+        if (credentials instanceof UsernamePasswordCredentials) 
+        {
+        	Map<String,Object> principalAttributes = authentication.getPrincipal().getAttributes();
+        	String id = authentication.getPrincipal().getId();
+            Principal simplePrincipal = new SimplePrincipal(id,principalAttributes);
             Long existingLoaValue = 0L;
             if (authentication.getAttributes().containsKey(LevelOfAssurance.LOA_ATTRIBUTE_NAME)) {
                 existingLoaValue = Long.valueOf(authentication.getAttributes().get(LevelOfAssurance.LOA_ATTRIBUTE_NAME).toString());
@@ -36,7 +41,8 @@ public class UsernamePasswordAuthenticationMetaDataPopulator implements Authenti
             mutableAuthentication.getAttributes().put(LevelOfAssurance.LOA_ATTRIBUTE_NAME, newLoa.asLong());
             return mutableAuthentication;
 
-        } else {
+        } else 
+        {
             return authentication;
         }
 

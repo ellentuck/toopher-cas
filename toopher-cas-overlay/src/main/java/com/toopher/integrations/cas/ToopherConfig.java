@@ -11,6 +11,7 @@ package com.toopher.integrations.cas;
  * <property name="consumerKey" value="${TOOPHER_CONSUMER_KEY}"/>
  * <property name="consumerSecret" value="${TOOPHER_CONSUMER_SECRET}"/>
  * <property name="apiUrl" value="${TOOPHER_BASE_URL}"/>
+ * <property name="iframeTtl" value="${TOOPHER_IFRAME_TTL_SECS}"/>
  * </bean>
  * }
  * </pre>
@@ -24,6 +25,7 @@ public class ToopherConfig {
     private String consumerKey;
     private String consumerSecret;
     private String apiUrl;
+    private int iframeTtl = 60;   // in seconds
 
     @java.lang.SuppressWarnings("all")
     public String getConsumerKey() {
@@ -53,5 +55,13 @@ public class ToopherConfig {
     @java.lang.SuppressWarnings("all")
     public void setApiUrl(final String apiUrl) {
         this.apiUrl = apiUrl;
+    }
+    
+    public int getiframeTtl() {
+    	return iframeTtl;
+    }
+    
+    public void setIframeTtl(final int iframeTtl) {
+    	this.iframeTtl = iframeTtl;
     }
 }

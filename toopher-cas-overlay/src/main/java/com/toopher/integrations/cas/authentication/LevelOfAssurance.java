@@ -10,6 +10,7 @@ public class LevelOfAssurance implements Serializable {
     public static final String LOA_TOOPHER = "toopher";
     public static final String LOA_TOOPHER_DISALLOW_AUTOMATION = "disallow_automation";
     public static final String LOA_TOOPHER_REQUIRE_CHALLENGE = "require_challenge";
+    public static final Long LOA_NONE = 0L;
     public static final Long LOA_USERNAME_PASSWORD_VAL = 2L;
     public static final Long LOA_TOOPHER_VAL = 4L;
     public static final Long LOA_TOOPHER_DISALLOW_AUTOMATION_VAL = 8L;

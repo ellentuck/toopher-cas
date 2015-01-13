@@ -11,17 +11,17 @@ public class ToopherCAS {
     private Logger logger = Logger.getLogger(ToopherCAS.class);
     private ToopherConfig toopherConfig;
     private UsernameToEmailMapper usernameToEmailMapper;
-    private int iframeTtl = 60;
+
 
     public String pairIframeUrl(String username) {
-        return ToopherIframe.pairIframeUrl(username, getEmailForUsername(username), iframeTtl, toopherConfig.getApiUrl(), toopherConfig.getConsumerKey(), toopherConfig.getConsumerSecret());
+        return ToopherIframe.pairIframeUrl(username, getEmailForUsername(username), toopherConfig.getiframeTtl(), toopherConfig.getApiUrl(), toopherConfig.getConsumerKey(), toopherConfig.getConsumerSecret());
     }
 
     public String authIframeUrl(String username, Long levelOfAssuranceValue, String loginTicketId) {
         logger.debug("ToopherCAS: authIframeUrl(" + username + ", " + String.valueOf(levelOfAssuranceValue) + ")");
         LevelOfAssurance loa = new LevelOfAssurance(levelOfAssuranceValue);
         boolean isAutomationAllowed = !loa.isDisallowAutomationRequired();
-        return ToopherIframe.authIframeUrl(username, getEmailForUsername(username), "Log In", isAutomationAllowed, loa.isChallengeRequired(), loginTicketId, "metadata", iframeTtl, toopherConfig.getApiUrl(), toopherConfig.getConsumerKey(), toopherConfig.getConsumerSecret());
+        return ToopherIframe.authIframeUrl(username, getEmailForUsername(username), "Log In", isAutomationAllowed, loa.isChallengeRequired(), loginTicketId, "metadata", toopherConfig.getiframeTtl(), toopherConfig.getApiUrl(), toopherConfig.getConsumerKey(), toopherConfig.getConsumerSecret());
     }
 
     private String getEmailForUsername(String username) {
@@ -54,13 +54,4 @@ public class ToopherCAS {
         this.usernameToEmailMapper = usernameToEmailMapper;
     }
 
-    @java.lang.SuppressWarnings("all")
-    public int getIframeTtl() {
-        return this.iframeTtl;
-    }
-
-    @java.lang.SuppressWarnings("all")
-    public void setIframeTtl(final int iframeTtl) {
-        this.iframeTtl = iframeTtl;
-    }
 }

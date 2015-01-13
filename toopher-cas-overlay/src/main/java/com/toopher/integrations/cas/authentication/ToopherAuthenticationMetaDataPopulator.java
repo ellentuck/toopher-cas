@@ -1,5 +1,7 @@
 package com.toopher.integrations.cas.authentication;
 
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.AuthenticationMetaDataPopulator;
@@ -7,6 +9,7 @@ import org.jasig.cas.authentication.MutableAuthentication;
 import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.authentication.principal.Principal;
 import org.jasig.cas.authentication.principal.SimplePrincipal;
+
 import com.toopher.integrations.cas.authentication.principal.ToopherCredentials;
 
 public class ToopherAuthenticationMetaDataPopulator implements AuthenticationMetaDataPopulator {
@@ -15,8 +18,11 @@ public class ToopherAuthenticationMetaDataPopulator implements AuthenticationMet
 
     @Override
     public Authentication populateAttributes(Authentication authentication, Credentials credentials) {
-        if (credentials instanceof ToopherCredentials) {
-            Principal simplePrincipal = new SimplePrincipal(authentication.getPrincipal().getId());
+        if (credentials instanceof ToopherCredentials) 
+        {
+        	Map<String,Object> principalAttributes = authentication.getPrincipal().getAttributes();
+        	String id = authentication.getPrincipal().getId();
+            Principal simplePrincipal = new SimplePrincipal(id,principalAttributes);
             MutableAuthentication mutableAuthentication = new MutableAuthentication(simplePrincipal, authentication.getAuthenticatedDate());
             // initialize the new authentication with the existing attributes
             mutableAuthentication.getAttributes().putAll(authentication.getAttributes());
@@ -49,7 +55,9 @@ public class ToopherAuthenticationMetaDataPopulator implements AuthenticationMet
             mutableAuthentication.getAttributes().put(LevelOfAssurance.LOA_ATTRIBUTE_NAME, newLoa.asLong());
             return mutableAuthentication;
 
-        } else {
+        } 
+        else 
+        {
             return authentication;
         }
 

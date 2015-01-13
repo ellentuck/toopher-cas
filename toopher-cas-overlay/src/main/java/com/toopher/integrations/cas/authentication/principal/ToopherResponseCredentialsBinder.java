@@ -18,12 +18,22 @@ public class ToopherResponseCredentialsBinder implements CredentialsBinder {
     private static final String KEY_EXECUTION = "execution";
     private static final String KEY_EVENT_ID = "_eventId";
     private static final String KEY_SERVICE = "service";
+    private static final String KEY_DESTINATION = "destination";
+    private static final String KEY_TARGET = "TARGET";
+    private static final String KEY_RELAY_STATE = "RelayState";
+    private static final String KEY_SAML_REQUEST = "SAMLRequest";
+    
+    
     private final static Set<String> KEYS_TO_EXCLUDE = new HashSet<String>(
             Arrays.asList(
                 KEY_LOGIN_TICKET,
                 KEY_EXECUTION,
                 KEY_EVENT_ID,
-                KEY_SERVICE));
+                KEY_SERVICE,
+                KEY_DESTINATION,
+                KEY_TARGET,
+                KEY_RELAY_STATE,
+                KEY_SAML_REQUEST));
 
     @Override
     public void bind(HttpServletRequest request, Credentials credentials) {

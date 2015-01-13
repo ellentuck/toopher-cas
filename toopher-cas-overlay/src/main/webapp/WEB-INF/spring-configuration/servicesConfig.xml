@@ -40,4 +40,32 @@
         </property>
     </bean>
 
+
+
+    <!-- 
+         An example of a Spring Bean that configures a slightly more elaborate 
+         SimplePrincipalLoaResolver as suggested above. Here, rather than mapping a
+         Service directly to a LevelOfAssurance, the resolver class maps the
+         RegisteredService ID to a LevelOfAssurance, which lets us reuse logic from
+         the service registry to associate the incoming Service destination with a 
+         RegisteredService, before associating the RegisteredService with a Level
+         of Assurance. 
+    -->
+  <!--
+  <bean id="registeredServiceLoaResolver" 
+     class="com.toopher.integrations.cas.web.flow.SimpleRegisteredServiceLoaResolver">
+     <property name="servicesManager" ref="servicesManager" />
+     <property name="serviceNameToLoa">
+            <map>
+                <entry key="https://sso.example.edu/cas-demo-app-1/protected/" value-ref="usernamePasswordOnly" />
+                <entry key="https://sso.example.edu/cas-demo-app-2/protected/" value-ref="toopherSimpleMFA" />
+                <entry key="https://sso.example.edu/cas-demo-app-3/protected/" value-ref="toopherSimpleMFA" />
+                <entry key="https://sso.example.edu/cas-demo-app-4/protected/" value-ref="toopherNoAutomationChallengeRequiredMFA" />              
+            </map>
+        </property>
+    </bean>
+    -->
+
+
+
 </beans>

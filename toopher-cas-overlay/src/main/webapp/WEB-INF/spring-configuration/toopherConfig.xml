@@ -27,6 +27,7 @@
     <property name="consumerKey" value="${TOOPHER_CONSUMER_KEY}"/>
     <property name="consumerSecret" value="${TOOPHER_CONSUMER_SECRET}"/>
     <property name="apiUrl" value="${TOOPHER_BASE_URL}"/>
+    <property name="iframeTtl" value="${TOOPHER_IFRAME_TTL_SECS}"/>
   </bean>
 
   <!--  Simple username->email mapper bean.  User emails can be individually
